@@ -1,2 +1,5 @@
 *.mp4
 !29-06-22_11-26-35.mp4
+test.py
+frames_to_video.py
+.DS_Store
