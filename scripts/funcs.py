@@ -8,7 +8,6 @@ import imageio
 from pathlib import Path
 from datetime import datetime
 import cv2
-import shutil
 import glob
 
 
@@ -49,8 +48,10 @@ def loop_frames(content_path, style_path, output_path, model_path):
         stylized_image = hub_model(tf.constant(content_image), tf.constant(style_image))[0]
         output_img= tensor_to_image(stylized_image)
         output_img.save(f"{output_path}{i}.png")
-        print(f"{int(int(i)/int(number_imgs)*100)}%")
+        progress = int(int(i)/int(number_imgs)*100)
+        print("", end=f"\r{progress} %")
     print("100%")
+
 def frames_to_video(input_path, output_path):
     cur_time = datetime.now()
     date_and_time = cur_time.strftime("%d-%m-%y_%H-%M-%S")
@@ -65,7 +66,9 @@ def frames_to_video(input_path, output_path):
             im.close()
         else:
             pass
-    imageio.mimwrite(f"{output_path}{date_and_time}.mp4", ims , fps = 30)
+    filepath = f"{output_path}{date_and_time}.mp4"
+    imageio.mimwrite(filepath, ims , fps = 30)
+    return filepath
 
 def video_to_frames(input_path, output_path):
     cap= cv2.VideoCapture(input_path)
